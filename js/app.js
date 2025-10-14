@@ -78,6 +78,75 @@
         // Obfuscated password - simple encoding
         const _0x4a2b = ['YW52aQ==']; // Base64 encoded "anvi"
         const CORRECT_PASSWORD = atob(_0x4a2b[0]);
+
+        // ==========================================
+        // BACKGROUND MUSIC CONTROL
+        // ==========================================
+        let backgroundMusic = null;
+        let isMusicMuted = false;
+
+        // Initialize music when DOM is loaded
+        function initMusic() {
+            backgroundMusic = document.getElementById('backgroundMusic');
+            const musicToggleBtn = document.getElementById('musicToggle');
+            
+            // Check if user had previously muted music
+            const savedMuteState = localStorage.getItem('musicMuted');
+            if (savedMuteState === 'true') {
+                isMusicMuted = true;
+                backgroundMusic.muted = true;
+                musicToggleBtn.textContent = '🔇';
+                musicToggleBtn.classList.add('muted');
+            }
+            
+            // Try to autoplay music (browsers may block this)
+            tryPlayMusic();
+            
+            // Add click listener to play music on first user interaction
+            document.addEventListener('click', function playOnInteraction() {
+                if (!backgroundMusic.playing) {
+                    tryPlayMusic();
+                }
+            }, { once: true });
+        }
+
+        // Function to toggle music on/off
+        function toggleMusic() {
+            const musicToggleBtn = document.getElementById('musicToggle');
+            
+            if (!backgroundMusic) {
+                backgroundMusic = document.getElementById('backgroundMusic');
+            }
+            
+            if (isMusicMuted) {
+                // Unmute
+                backgroundMusic.muted = false;
+                isMusicMuted = false;
+                musicToggleBtn.textContent = '🔊';
+                musicToggleBtn.classList.remove('muted');
+                localStorage.setItem('musicMuted', 'false');
+                tryPlayMusic();
+            } else {
+                // Mute
+                backgroundMusic.muted = true;
+                isMusicMuted = true;
+                musicToggleBtn.textContent = '🔇';
+                musicToggleBtn.classList.add('muted');
+                localStorage.setItem('musicMuted', 'true');
+            }
+        }
+
+        // Try to play music (handle autoplay restrictions)
+        function tryPlayMusic() {
+            if (backgroundMusic && !isMusicMuted) {
+                backgroundMusic.play().catch(error => {
+                    console.log('Autoplay prevented. Music will play after user interaction.');
+                });
+            }
+        }
+
+        // Initialize music when page loads
+        document.addEventListener('DOMContentLoaded', initMusic);
         
         const rooms = [
             'backroom', 'family-room', 'kitchen', 'laundry', 'bathroom',
