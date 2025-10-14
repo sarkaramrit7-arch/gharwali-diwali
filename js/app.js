@@ -188,10 +188,11 @@
         // All valid player names for searchable dropdown
         // Valid player names - loaded from Firebase
         let validPlayerNames = [
-            'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Arnab', 'Tithi', 'Avirup', 'Biranchi',
-            'Deepali', 'Indira', 'Kevin', 'Meet', 'Namy', 'Nikunj', 'Prashanth', 'Priyanka',
-            'Ryan', 'Sampada', 'Sharan', 'Shaswat', 'Shreeya', 'Sid', 'Supriya', 'Swati',
-            'Vraja', 'Dipendu', 'Sophia', 'Harshal', 'Minal', 'Maria'
+            'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Arnab', 'Avirup', 'Biranchi',
+            'Deepali', 'Deepika', 'Dipendu', 'Harshal', 'Indira', 'Kevin', 'Maria',
+            'Meet', 'Minal', 'Namy', 'Nikunj', 'Prashanth', 'Priyanka', 'Ryan',
+            'Sampada', 'Sharan', 'Shaswat', 'Shreeya', 'Sid', 'Sophia', 'Supriya',
+            'Swati', 'Tithi', 'Vraja'
         ]; // Default fallback
         
         // Load valid player names from Firebase
