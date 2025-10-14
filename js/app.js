@@ -147,6 +147,88 @@
 
         // Initialize music when page loads
         document.addEventListener('DOMContentLoaded', initMusic);
+
+        // ==========================================
+        // COUNTDOWN TIMER (Two-Stage Surprise!)
+        // ==========================================
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdownTimer');
+            const headingElement = document.getElementById('countdownHeading');
+            const subtextElement = document.getElementById('countdownSubtext');
+            
+            if (!countdownElement) return;
+            
+            const now = new Date();
+            
+            // Stage 1: Count down to 4:00 PM PST on October 18, 2025
+            const stage1Target = new Date('2025-10-18T16:00:00-07:00');
+            
+            // Stage 2: Final target at 6:45 PM PST
+            const finalTarget = new Date('2025-10-18T18:45:00-07:00');
+            
+            // Check if we're past the final target
+            if (now >= finalTarget) {
+                // Event has started!
+                if (headingElement) headingElement.innerHTML = '🎉 IT\'S PARTY TIME! 🎉';
+                countdownElement.innerHTML = '🎊 THE DIWALI MADNESS HAS BEGUN! 🎊';
+                countdownElement.style.fontSize = '24px';
+                countdownElement.style.animation = 'pulse 1s infinite';
+                if (subtextElement) subtextElement.innerHTML = '✨ Let the games begin! ✨';
+                return;
+            }
+            
+            // Check if we're in Stage 2 (between 4 PM and 6:45 PM)
+            if (now >= stage1Target && now < finalTarget) {
+                // Stage 2: Show countdown for remaining time
+                const timeDiff = finalTarget - now;
+                
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                
+                const formatNum = (num) => String(num).padStart(2, '0');
+                
+                if (headingElement) headingElement.innerHTML = '🤯 PLOT TWIST! The games starts at 6:45PM 🤯';
+                countdownElement.innerHTML = `
+                    ${formatNum(hours)} Hours : 
+                    ${formatNum(minutes)} Mins : 
+                    ${formatNum(seconds)} Secs
+                `;
+                if (subtextElement) subtextElement.innerHTML = '😏 Patience, young grasshopper... ✨';
+                return;
+            }
+            
+            // Stage 1: Count down to 4:00 PM
+            const timeDiff = stage1Target - now;
+            
+            if (timeDiff <= 0) {
+                // Transition moment - shouldn't stay here long
+                countdownElement.innerHTML = '⏰ Calculating... ⏰';
+                return;
+            }
+            
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            const formatNum = (num) => String(num).padStart(2, '0');
+            
+            // Update display for Stage 1
+            if (headingElement) headingElement.innerHTML = '🎆 The Diwali Madness Begins In... 🎆';
+            countdownElement.innerHTML = `
+                ${days} ${days === 1 ? 'Day' : 'Days'} : 
+                ${formatNum(hours)} Hours : 
+                ${formatNum(minutes)} Mins : 
+                ${formatNum(seconds)} Secs
+            `;
+            if (subtextElement) subtextElement.innerHTML = '📅 October 18, 2025 ✨';
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        // Initialize immediately
+        updateCountdown();
         
         const rooms = [
             'backroom', 'family-room', 'kitchen', 'laundry', 'bathroom',
