@@ -149,6 +149,110 @@
         document.addEventListener('DOMContentLoaded', initMusic);
 
         // ==========================================
+        // DIWALI FIRECRACKERS ANIMATION
+        // ==========================================
+        function createFirecracker() {
+            const colors = ['#FFD700', '#FF6B35', '#FF9933', '#FF6B9D', '#C44569', '#764ba2'];
+            const emojis = ['✨', '💥', '🎆', '🎇', '⭐', '💫'];
+            
+            const firecracker = document.createElement('div');
+            firecracker.className = 'firecracker';
+            firecracker.style.left = Math.random() * window.innerWidth + 'px';
+            firecracker.style.top = window.innerHeight - 50 + 'px';
+            firecracker.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            firecracker.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            firecracker.style.animation = 'firework 2s ease-out';
+            
+            // Add sparkles
+            const sparkleCount = Math.floor(Math.random() * 5) + 3;
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                const angle = (360 / sparkleCount) * i;
+                const distance = Math.random() * 30 + 20;
+                sparkle.style.left = Math.cos(angle * Math.PI / 180) * distance + 'px';
+                sparkle.style.top = Math.sin(angle * Math.PI / 180) * distance + 'px';
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+                firecracker.appendChild(sparkle);
+            }
+            
+            document.body.appendChild(firecracker);
+            
+            setTimeout(() => {
+                firecracker.remove();
+            }, 2000);
+        }
+
+        function createDiya() {
+            const diya = document.createElement('div');
+            diya.className = 'diya';
+            diya.textContent = '🪔';
+            diya.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            diya.style.top = Math.random() * (window.innerHeight - 100) + 50 + 'px';
+            diya.style.animationDelay = Math.random() * 2 + 's';
+            diya.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            
+            document.body.appendChild(diya);
+            
+            // Remove after animation completes several cycles
+            setTimeout(() => {
+                diya.remove();
+            }, 15000);
+        }
+
+        // Create firecrackers periodically
+        function startFireworks() {
+            // Don't run animations on challenges screen
+            if (document.getElementById('challengesScreen') && 
+                !document.getElementById('challengesScreen').classList.contains('hidden')) {
+                return;
+            }
+            
+            // Create initial diyas
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createDiya(), i * 1000);
+            }
+            
+            // Periodic firecrackers
+            const fireworkInterval = setInterval(() => {
+                // Stop if on challenges screen
+                if (document.getElementById('challengesScreen') && 
+                    !document.getElementById('challengesScreen').classList.contains('hidden')) {
+                    return;
+                }
+                
+                if (Math.random() > 0.5) {
+                    createFirecracker();
+                }
+            }, 2000);
+            
+            // Periodic diyas
+            const diyaInterval = setInterval(() => {
+                // Stop if on challenges screen
+                if (document.getElementById('challengesScreen') && 
+                    !document.getElementById('challengesScreen').classList.contains('hidden')) {
+                    return;
+                }
+                
+                if (Math.random() > 0.7) {
+                    createDiya();
+                }
+            }, 5000);
+        }
+
+        // Start fireworks when page loads (only on non-challenges pages)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                // Only start if not on challenges screen
+                const challengesScreen = document.getElementById('challengesScreen');
+                if (!challengesScreen || challengesScreen.classList.contains('hidden')) {
+                    startFireworks();
+                }
+            }, 1000);
+        });
+
+        // ==========================================
         // COUNTDOWN TIMER (Two-Stage Surprise!)
         // ==========================================
         function updateCountdown() {
@@ -170,7 +274,7 @@
             if (now >= finalTarget) {
                 // Event has started!
                 if (headingElement) headingElement.innerHTML = '🎉 IT\'S PARTY TIME! 🎉';
-                countdownElement.innerHTML = '🎊 THE DIWALI MADNESS HAS BEGUN! 🎊';
+                countdownElement.innerHTML = '🎊 LET THE GAMES BEGIN! 🎊';
                 countdownElement.style.fontSize = '24px';
                 countdownElement.style.animation = 'pulse 1s infinite';
                 if (subtextElement) subtextElement.innerHTML = '✨ Let the games begin! ✨';
@@ -215,7 +319,7 @@
             const formatNum = (num) => String(num).padStart(2, '0');
             
             // Update display for Stage 1
-            if (headingElement) headingElement.innerHTML = '🎆 The Diwali Madness Begins In... 🎆';
+            if (headingElement) headingElement.innerHTML = '🎆 Fun Begins In... 🎆';
             countdownElement.innerHTML = `
                 ${days} ${days === 1 ? 'Day' : 'Days'} : 
                 ${formatNum(hours)} Hours : 
@@ -749,11 +853,19 @@
                 const assignmentsSnapshot = await get(assignmentsRef);
                 
                 if (!assignmentsSnapshot.exists()) {
-                    teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">No team assignments yet.</p>';
+                    teamMembersList.innerHTML = `
+                        <div style="padding: 20px; background: #fff3cd; border-radius: 10px; text-align: center;">
+                            <p style="color: #856404; font-weight: 600; margin-bottom: 10px;">⚠️ Team assignments not configured</p>
+                            <p style="color: #666; font-size: 13px; margin-bottom: 10px;">Please ask the admin to set up teams first.</p>
+                            <p style="color: #999; font-size: 12px;">Admin: Go to admin panel → Auto-Assign All Players</p>
+                        </div>
+                    `;
                     return;
                 }
                 
                 const assignments = assignmentsSnapshot.val();
+                console.log('📋 All team assignments loaded:', assignments);
+                console.log('👤 Current player:', playerName, 'Team:', teamName);
                 
                 // Get active players to show online status
                 const activePlayersRef = ref(database, 'activePlayers');
@@ -790,6 +902,8 @@
                     if (!a.isOnline && b.isOnline) return 1;
                     return a.name.localeCompare(b.name);
                 });
+                
+                console.log('👥 Teammates found:', teammates.length, teammates.map(t => `${t.name}${t.isOnline ? '🟢' : '⚪'}`));
                 
                 // Display team members
                 if (teammates.length === 0) {
@@ -857,27 +971,9 @@
             // Show loading state
             const originalBtnText = continueBtn.textContent;
             continueBtn.disabled = true;
-            continueBtn.textContent = 'Checking availability...';
+            continueBtn.textContent = 'Checking team assignment...';
             nameError.classList.remove('show');
             playerName = validatedName;
-            
-            // Check if this player name is already in use
-            const isAvailable = await checkPlayerNameAvailability(playerName);
-            
-            // Reset button state
-            continueBtn.disabled = false;
-            continueBtn.textContent = originalBtnText;
-            
-            if (!isAvailable) {
-                nameError.textContent = `"${playerName}" is already logged in! Please choose a different name.`;
-                nameError.classList.add('show');
-                document.getElementById('playerName').value = '';
-                return;
-            }
-            
-            // Check for manual team assignment from admin
-            continueBtn.textContent = 'Checking team assignment...';
-            continueBtn.disabled = true;
             
             try {
                 const { ref, get } = window.firebaseDB;
@@ -1816,32 +1912,6 @@
             console.log('⏸️ Left game - timer continues in Firebase for team');
         }
         
-        async function checkPlayerNameAvailability(nameToCheck) {
-            // Check if this player name is already logged in
-            if (!database || !window.firebaseDB) {
-                return true; // Allow if Firebase not ready
-            }
-            
-            const { ref, get } = window.firebaseDB;
-            const activePlayersRef = ref(database, 'activePlayers');
-            
-            try {
-                const snapshot = await get(activePlayersRef);
-                if (snapshot.exists()) {
-                    const activePlayers = snapshot.val();
-                    // Check if this name is already in use
-                    for (let pid in activePlayers) {
-                        if (activePlayers[pid].name === nameToCheck && activePlayers[pid].isActive) {
-                            return false; // Name already in use
-                        }
-                    }
-                }
-                return true; // Name available
-            } catch (error) {
-                console.error('Error checking player name:', error);
-                return true; // Allow on error
-            }
-        }
         
         async function startGameLogin() {
             const enteredPassword = document.getElementById('password').value;
