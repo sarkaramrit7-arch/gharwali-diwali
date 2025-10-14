@@ -169,6 +169,35 @@
             cursor: not-allowed;
             transform: none;
         }
+        
+        /* Searchable dropdown styling */
+        #nameDropdown {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(102, 126, 234, 0.5) rgba(255, 255, 255, 0.1);
+        }
+        #nameDropdown::-webkit-scrollbar {
+            width: 8px;
+        }
+        #nameDropdown::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        #nameDropdown::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+        #nameDropdown::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+        .name-option:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .name-option:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            border-bottom: none;
+        }
         @media (max-width: 768px) {
             .login-btn {
                 padding: 18px;
@@ -1119,15 +1148,19 @@
             <p class="login-subtitle">@Anvi & Amrit</p>
             <div class="login-form">
                 <div class="form-group">
-                    <label for="playerName">Select or Enter Your Name</label>
-                    <input list="namesList" id="playerName" placeholder="Choose from list or type your name" required>
-                    <datalist id="namesList">
-                        <option value="Anvi">
-                        <option value="Amrit">
-                        <option value="Priya">
-                        <option value="Rahul">
-                        <option value="Neha">
-                    </datalist>
+                    <label for="playerName">Select Your Name</label>
+                    <div style="position: relative;">
+                        <input type="text" 
+                               id="playerName" 
+                               placeholder="Type to search or click to see all..."
+                               autocomplete="off"
+                               required
+                               style="width: 100%; padding: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 10px; background: rgba(255,255,255,0.1); color: white; font-size: 16px; backdrop-filter: blur(10px);">
+                        <div id="nameDropdown" 
+                             style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 300px; overflow-y: auto; background: rgba(50, 50, 70, 0.95); border: 2px solid rgba(255,255,255,0.3); border-radius: 10px; margin-top: 5px; backdrop-filter: blur(10px); z-index: 1000;">
+                        </div>
+                    </div>
+                    <input type="hidden" id="playerNameValidated" value="">
                 </div>
                 <button type="button" class="login-btn" onclick="proceedToPassword()">Continue</button>
                 <p class="error-message" id="nameError">Please enter your name!</p>
@@ -1151,7 +1184,7 @@
                     <p id="displayNameLabel2" style="font-size: 20px; font-weight: bold; color: #667eea; padding: 10px; background: #f0f0f0; border-radius: 8px; text-align: center;"></p>
                 </div>
                 <div class="form-group">
-                    <label for="displayTeamLabel2">Your Team (Auto-assigned based on your name)</label>
+                    <label for="displayTeamLabel2">Your Team</label>
                     <p id="displayTeamLabel2" style="font-size: 18px; font-weight: bold; color: #51cf66; padding: 10px; background: #f0f0f0; border-radius: 8px; text-align: center;"></p>
                 </div>
                 <div class="form-group">
@@ -1585,6 +1618,88 @@
             window.bonusTimeValue = 30;
         }
         
+        // All valid player names for searchable dropdown
+        const validPlayerNames = [
+            'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Arnab', 'Tithi', 'Avirup', 'Biranchi',
+            'Deepali', 'Indira', 'Kevin', 'Meet', 'Namy', 'Nikunj', 'Prashanth', 'Priyanka',
+            'Ryan', 'Sampada', 'Sharan', 'Shaswat', 'Shreeya', 'Sid', 'Supriya', 'Swati',
+            'Vraja', 'Dipendu', 'Sophia', 'Harshal', 'Minal', 'Maria'
+        ];
+        
+        // Searchable dropdown functionality
+        function initializeSearchableDropdown() {
+            const input = document.getElementById('playerName');
+            const dropdown = document.getElementById('nameDropdown');
+            const hiddenInput = document.getElementById('playerNameValidated');
+            
+            if (!input || !dropdown) return;
+            
+            // Show all names when input is focused or clicked
+            input.addEventListener('focus', function() {
+                showFilteredNames('');
+            });
+            
+            input.addEventListener('click', function() {
+                showFilteredNames(input.value);
+            });
+            
+            // Filter names as user types
+            input.addEventListener('input', function() {
+                const searchTerm = input.value;
+                hiddenInput.value = ''; // Clear validation until user selects
+                showFilteredNames(searchTerm);
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+            
+            function showFilteredNames(searchTerm) {
+                const filtered = validPlayerNames.filter(name => 
+                    name.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                
+                if (filtered.length === 0) {
+                    dropdown.innerHTML = '<div style="padding: 12px; color: #ff6b6b; text-align: center;">No matches found</div>';
+                    dropdown.style.display = 'block';
+                    return;
+                }
+                
+                dropdown.innerHTML = filtered.map(name => `
+                    <div class="name-option" 
+                         data-name="${name}"
+                         style="padding: 12px; cursor: pointer; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;"
+                         onmouseover="this.style.background='rgba(102, 126, 234, 0.5)'"
+                         onmouseout="this.style.background='transparent'"
+                         onclick="selectPlayerName('${name}')">
+                        ${name}
+                    </div>
+                `).join('');
+                
+                dropdown.style.display = 'block';
+            }
+        }
+        
+        // Select a name from dropdown
+        window.selectPlayerName = function(name) {
+            const input = document.getElementById('playerName');
+            const dropdown = document.getElementById('nameDropdown');
+            const hiddenInput = document.getElementById('playerNameValidated');
+            
+            input.value = name;
+            hiddenInput.value = name;
+            dropdown.style.display = 'none';
+            
+            // Clear any previous error
+            const nameError = document.getElementById('nameError');
+            if (nameError) {
+                nameError.classList.remove('show');
+            }
+        }
+        
         // Anti-debugging measures
         (function() {
             // Disable right-click
@@ -1956,6 +2071,9 @@
             
             // Load game settings (timer) from Firebase
             loadGameSettings();
+            
+            // Initialize searchable dropdown
+            initializeSearchableDropdown();
         });
         
         function confirmIdentity() {
@@ -2035,11 +2153,19 @@
         
         async function proceedToPassword() {
             const enteredPlayerName = document.getElementById('playerName').value.trim();
+            const validatedName = document.getElementById('playerNameValidated').value;
             const nameError = document.getElementById('nameError');
             const continueBtn = document.querySelector('#nameScreen .login-btn');
             
             if (!enteredPlayerName) {
-                nameError.textContent = 'Please enter your name!';
+                nameError.textContent = 'Please select your name from the list!';
+                nameError.classList.add('show');
+                return;
+            }
+            
+            // Validate that the name is from the approved list
+            if (!validatedName || !validPlayerNames.includes(validatedName)) {
+                nameError.textContent = 'Please select a valid name from the dropdown list!';
                 nameError.classList.add('show');
                 return;
             }
@@ -2049,7 +2175,7 @@
             continueBtn.disabled = true;
             continueBtn.textContent = 'Checking availability...';
             nameError.classList.remove('show');
-            playerName = enteredPlayerName;
+            playerName = validatedName;
             
             // Check if this player name is already in use
             const isAvailable = await checkPlayerNameAvailability(playerName);
@@ -2065,10 +2191,37 @@
                 return;
             }
             
-            // Auto-assign team based on hash of player name for consistency (consistent hashing)
-            const hash = playerName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            const teamIndex = hash % teamNames.length;
-            teamName = teamNames[teamIndex];
+            // Check for manual team assignment from admin
+            continueBtn.textContent = 'Checking team assignment...';
+            continueBtn.disabled = true;
+            
+            try {
+                const { ref, get } = window.firebaseDB;
+                const assignmentRef = ref(database, `playerTeamAssignments/${playerName}`);
+                const assignmentSnapshot = await get(assignmentRef);
+                const manualAssignment = assignmentSnapshot.val();
+                
+                if (manualAssignment && teamNames.includes(manualAssignment)) {
+                    // Use manual assignment from admin
+                    teamName = manualAssignment;
+                    console.log(`✅ Using manual team assignment: ${teamName}`);
+                } else {
+                    // Fallback to consistent hashing if no manual assignment
+                    const hash = playerName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                    const teamIndex = hash % teamNames.length;
+                    teamName = teamNames[teamIndex];
+                    console.log(`ℹ️ No manual assignment, using consistent hashing: ${teamName}`);
+                }
+            } catch (error) {
+                console.error('Error checking team assignment:', error);
+                // Fallback to consistent hashing on error
+                const hash = playerName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                const teamIndex = hash % teamNames.length;
+                teamName = teamNames[teamIndex];
+            }
+            
+            continueBtn.disabled = false;
+            continueBtn.textContent = originalBtnText;
             
             // Generate player ID immediately
             playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
