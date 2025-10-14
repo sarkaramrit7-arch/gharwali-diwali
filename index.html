@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🏠 Gharwali Diwali - @Anvi & Amrit</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-    <!-- EmailJS for sending emails directly from browser -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <!-- Google Fonts - Festive Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -626,6 +624,8 @@
             position: relative;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            min-height: 140px;
+            padding: 10px;
         }
         .marker-point:hover {
             transform: scale(1.05);
@@ -646,17 +646,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-top: 4px;
+            gap: 15px;
+            margin-top: 10px;
+            width: 100%;
         }
         .marker-count-btn {
-            width: 28px;
-            height: 28px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            border: 2px solid white;
+            border: 3px solid white;
             background: rgba(255, 255, 255, 0.3);
             color: white;
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -664,6 +665,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             z-index: 10;
+            flex-shrink: 0;
         }
         .marker-count-btn:hover {
             background: rgba(255, 255, 255, 0.5);
@@ -683,12 +685,13 @@
             text-align: center;
         }
         .marker-point .marker-main-number {
-            font-size: 32px;
-            margin-bottom: 2px;
+            font-size: 36px;
+            margin-bottom: 0px;
+            line-height: 1;
         }
         .marker-point:not(.marked) .marker-main-number {
             color: #999;
-            font-size: 40px;
+            font-size: 48px;
         }
         .marker-point:not(.marked):hover .marker-main-number {
             color: #2196F3;
@@ -700,15 +703,19 @@
             }
             .marker-point {
                 border-width: 3px;
-                min-height: 80px;
+                min-height: 100px;
             }
             .marker-point .marker-main-number {
-                font-size: 28px;
+                font-size: 30px;
+            }
+            .marker-point:not(.marked) .marker-main-number {
+                font-size: 40px;
             }
             .marker-count-btn {
-                width: 26px;
-                height: 26px;
-                font-size: 16px;
+                width: 42px;
+                height: 42px;
+                font-size: 22px;
+                border-width: 3px;
             }
             .marker-count-display {
                 font-size: 18px;
@@ -721,15 +728,19 @@
             }
             .marker-point {
                 border-width: 2.5px;
-                min-height: 75px;
+                min-height: 95px;
             }
             .marker-point .marker-main-number {
-                font-size: 24px;
+                font-size: 26px;
+            }
+            .marker-point:not(.marked) .marker-main-number {
+                font-size: 36px;
             }
             .marker-count-btn {
-                width: 24px;
-                height: 24px;
-                font-size: 14px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                border-width: 3px;
             }
             .marker-count-display {
                 font-size: 16px;
@@ -1305,6 +1316,42 @@
                 </p>
             </div>
             
+            <!-- Practice Room Example -->
+            <div style="max-width: 500px; margin: 30px auto; padding: 20px; background: rgba(255, 255, 255, 0.95); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 10px;">🎯 Try It Out!</h3>
+                <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 20px;">
+                    Click a circle to start counting, then use +/− buttons to adjust
+                </p>
+                <div class="markers-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 350px; margin: 0 auto;">
+                    <div class="marker-point" id="practice1" onclick="adjustPracticeCount(1, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice2" onclick="adjustPracticeCount(2, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice3" onclick="adjustPracticeCount(3, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice4" onclick="adjustPracticeCount(4, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice5" onclick="adjustPracticeCount(5, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice6" onclick="adjustPracticeCount(6, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button type="button" onclick="resetPracticeRoom()" onmouseover="this.style.background='#777'" onmouseout="this.style.background='#999'" style="padding: 8px 20px; background: #999; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">
+                        🔄 Reset Practice
+                    </button>
+                </div>
+                <p style="text-align: center; color: #999; font-size: 12px; margin-top: 10px; font-style: italic;">
+                    💡 This is just a preview - your real progress will be saved in the game!
+                </p>
+            </div>
+            
             <div class="login-form">
                 <div class="form-group">
                     <label for="password">Enter Password to Start</label>
@@ -1470,6 +1517,10 @@
             "challengeStatus": {
               ".read": true,
               ".write": true
+            },
+            "gameSettings": {
+              ".read": true,
+              ".write": true
             }
           }
         }
@@ -1519,7 +1570,8 @@
         let teamRef = null;
         let markedLocations = {};
         let currentRoom = null;
-        let timeRemaining = 60; // 1 minute
+        let timeRemaining = 120; // Default 2 minutes (can be changed by admin)
+        let initialTimerValue = 120; // Store the admin-set timer value
         let timerInterval = null;
         let gameActive = false;
         let teamName = '';
@@ -1527,6 +1579,11 @@
         let playerId = '';
         let bonusAdded = false;
         let isConnected = false;
+        
+        // Initialize bonus time value with default
+        if (!window.bonusTimeValue) {
+            window.bonusTimeValue = 30;
+        }
         
         // Anti-debugging measures
         (function() {
@@ -1583,11 +1640,6 @@
             console.log('%c⚠️ STOP!', 'color: red; font-size: 50px; font-weight: bold;');
             console.log('%cThis is a browser feature intended for developers. Do not paste any code here.', 'font-size: 18px;');
             console.log('%cAccessing game source code violates the game rules.', 'font-size: 16px; color: red;');
-        })();
-        
-        // Initialize EmailJS
-        (function() {
-            emailjs.init("aKYcg95cvALzEgS3b"); // Public key
         })();
         
         // Initialize marked locations structure
@@ -1663,6 +1715,36 @@
             onValue(scoresRef, (snapshot) => {
                 const scores = snapshot.val() || {};
                 updateLeaderboardDisplay(scores);
+            });
+        }
+        
+        // Load game settings (timer, bonus time) from Firebase
+        function loadGameSettings() {
+            if (!database || !window.firebaseDB) {
+                setTimeout(loadGameSettings, 500);
+                return;
+            }
+            
+            const { ref, onValue } = window.firebaseDB;
+            const settingsRef = ref(database, 'gameSettings');
+            
+            onValue(settingsRef, (snapshot) => {
+                const settings = snapshot.val();
+                if (settings) {
+                    // Update timer values
+                    if (settings.initialTimer !== undefined) {
+                        initialTimerValue = settings.initialTimer;
+                        console.log('⏱️  Timer updated to:', initialTimerValue, 'seconds');
+                    }
+                    if (settings.bonusTime !== undefined) {
+                        window.bonusTimeValue = settings.bonusTime;
+                        console.log('⏱️  Bonus time updated to:', settings.bonusTime, 'seconds');
+                    }
+                } else {
+                    // Set defaults if not configured
+                    initialTimerValue = 120;
+                    window.bonusTimeValue = 30;
+                }
             });
         }
         
@@ -1871,6 +1953,9 @@
             
             // Load challenge unlock status from Firebase
             loadChallengeStatus();
+            
+            // Load game settings (timer) from Firebase
+            loadGameSettings();
         });
         
         function confirmIdentity() {
@@ -2466,6 +2551,85 @@
             syncToDatabase({ markers: markedLocations });
         }
 
+        // Practice room state (local only, not synced)
+        const practiceState = {};
+
+        function adjustPracticeCount(pointId, delta) {
+            // Initialize if not exists
+            if (!practiceState[pointId]) {
+                practiceState[pointId] = 0;
+            }
+            
+            // Adjust count
+            const currentCount = practiceState[pointId];
+            const newCount = Math.max(0, currentCount + delta);
+            practiceState[pointId] = newCount;
+            
+            // Update UI
+            const marker = document.getElementById(`practice${pointId}`);
+            if (!marker) return;
+            
+            // Clear existing content
+            marker.innerHTML = '';
+            marker.onclick = null;
+            
+            // Main number
+            const mainNumber = document.createElement('div');
+            mainNumber.className = 'marker-main-number';
+            mainNumber.textContent = newCount > 0 ? newCount : '•';
+            marker.appendChild(mainNumber);
+            
+            if (newCount > 0) {
+                marker.classList.add('marked');
+                
+                // Counter controls
+                const counterWrapper = document.createElement('div');
+                counterWrapper.className = 'marker-counter-wrapper';
+                
+                // Minus button
+                const minusBtn = document.createElement('div');
+                minusBtn.className = 'marker-count-btn';
+                minusBtn.textContent = '−';
+                minusBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    adjustPracticeCount(pointId, -1);
+                };
+                
+                // Plus button
+                const plusBtn = document.createElement('div');
+                plusBtn.className = 'marker-count-btn';
+                plusBtn.textContent = '+';
+                plusBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    adjustPracticeCount(pointId, 1);
+                };
+                
+                counterWrapper.appendChild(minusBtn);
+                counterWrapper.appendChild(plusBtn);
+                marker.appendChild(counterWrapper);
+            } else {
+                marker.classList.remove('marked');
+                marker.onclick = () => adjustPracticeCount(pointId, 1);
+            }
+        }
+
+        function resetPracticeRoom() {
+            // Clear practice state
+            for (let key in practiceState) {
+                delete practiceState[key];
+            }
+            
+            // Reset all practice markers
+            for (let i = 1; i <= 6; i++) {
+                const marker = document.getElementById(`practice${i}`);
+                if (marker) {
+                    marker.classList.remove('marked');
+                    marker.innerHTML = '<div class="marker-main-number">•</div>';
+                    marker.onclick = () => adjustPracticeCount(i, 1);
+                }
+            }
+        }
+
         function updateRoomCount(roomId) {
             const count = Object.keys(markedLocations[roomId] || {}).length;
             document.getElementById('roomCount').textContent = count;
@@ -2490,7 +2654,7 @@
 
         function startGame() {
             gameActive = true;
-            timeRemaining = 60;
+            timeRemaining = initialTimerValue; // Use admin-set value
             bonusAdded = false;
             // No start button in this version - game auto-starts on login
             document.getElementById('gameOver').style.display = 'none';
@@ -2548,284 +2712,25 @@
 
         function addBonusTime() {
             bonusAdded = true;
-            timeRemaining = 30;
+            const bonusTime = window.bonusTimeValue || 30;
+            timeRemaining = bonusTime;
+            
+            // Update surprise message with actual bonus time
+            const surpriseMsg = document.getElementById('surpriseMessage');
+            surpriseMsg.innerHTML = `🎉 PLOT TWIST! 🎉<br>You get ${bonusTime} MORE SECONDS!<br>It's not over yet! 😄`;
             
             document.getElementById('surpriseOverlay').classList.add('show');
-            document.getElementById('surpriseMessage').classList.add('show');
+            surpriseMsg.classList.add('show');
             
             setTimeout(() => {
                 document.getElementById('surpriseOverlay').classList.remove('show');
-                document.getElementById('surpriseMessage').classList.remove('show');
+                surpriseMsg.classList.remove('show');
             }, 3000);
             
             syncToDatabase({
                 timeRemaining: timeRemaining,
                 bonusAdded: true
             });
-        }
-
-        function generateHTMLReport() {
-            const totalMarked = rooms.reduce((sum, room) => {
-                return sum + Object.keys(markedLocations[room] || {}).length;
-            }, 0);
-            
-            const reportDate = new Date().toLocaleString();
-            
-            let roomDetails = '';
-            let exactMarkingsList = '';
-            
-            rooms.forEach(room => {
-                const markers = markedLocations[room] || {};
-                const count = Object.keys(markers).length;
-                const roomName = roomNames[room];
-                
-                // Build list of exact marked points with counts
-                const markedPoints = [];
-                const unmarkedPoints = [];
-                let totalRoomCount = 0;
-                for (let i = 1; i <= 9; i++) {
-                    if (markers[i]) {
-                        const pointCount = markers[i].count || 0;
-                        totalRoomCount += pointCount;
-                        markedPoints.push(`Point ${i}: ${pointCount} items (${markers[i].playerName})`);
-                    } else {
-                        unmarkedPoints.push(i);
-                    }
-                }
-                
-                // Exact markings list
-                exactMarkingsList += `
-                    <div style="margin-bottom: 15px; padding: 12px; background: #f0f0f0; border-radius: 6px; border-left: 4px solid #667eea;">
-                        <strong style="color: #667eea; font-size: 14px;">${roomName}</strong> <span style="color: #999; font-size: 12px;">(Total: ${totalRoomCount} items)</span>
-                        <div style="margin-top: 8px; font-size: 13px;">
-                            ${markedPoints.length > 0 ? 
-                                `<div style="color: #155724; margin-bottom: 5px;">✓ <strong>Marked Points:</strong><br>${markedPoints.join('<br>')}</div>` : 
-                                `<div style="color: #721c24;">✗ <strong>No points marked</strong></div>`}
-                            ${unmarkedPoints.length > 0 ? 
-                                `<div style="color: #856404;">○ <strong>Not Marked:</strong> Points ${unmarkedPoints.join(', ')}</div>` : 
-                                `<div style="color: #155724;">✓ <strong>All points marked!</strong></div>`}
-                        </div>
-                    </div>`;
-                
-                // Visual grid
-                roomDetails += `
-                    <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
-                        <h3 style="color: #667eea; margin-bottom: 10px;">${roomName} (${count}/9 points marked, ${totalRoomCount} items total)</h3>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">`;
-                
-                for (let i = 1; i <= 9; i++) {
-                    const markerData = markers[i];
-                    const pointCount = markerData?.count || 0;
-                    const status = markerData ? `✓ ${pointCount} items` : '○ Not Marked';
-                    const markedBy = markerData ? `by ${markerData.playerName}` : '';
-                    const bgColor = markerData ? '#d4edda' : '#f8d7da';
-                    const textColor = markerData ? '#155724' : '#721c24';
-                    
-                    roomDetails += `
-                        <div style="padding: 10px; background: ${bgColor}; color: ${textColor}; border-radius: 5px; text-align: center; font-size: 12px;">
-                            <strong>Point ${i}</strong><br>
-                            ${status}<br>
-                            <small>${markedBy}</small>
-                        </div>`;
-                }
-                
-                roomDetails += `
-                        </div>
-                    </div>`;
-            });
-            
-            const htmlReport = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gharwali Diwali Game Report - ${teamName}</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .summary {
-            background: #e3f2fd;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .summary-item {
-            display: inline-block;
-            margin: 10px 20px;
-        }
-        .summary-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-        }
-        .summary-label {
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🏠 Gharwali Diwali House Marker</h1>
-        <h2 style="text-align: center; color: #999; margin-bottom: 30px;">Game Report</h2>
-        
-        <div class="summary">
-            <div class="summary-item">
-                <div class="summary-value">${teamName}</div>
-                <div class="summary-label">Team Name</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">${totalMarked}/90</div>
-                <div class="summary-label">Locations Marked</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">${Math.round((totalMarked/90)*100)}%</div>
-                <div class="summary-label">Completion</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">${reportDate}</div>
-                <div class="summary-label">Completed At</div>
-            </div>
-        </div>
-        
-        <h2 style="color: #667eea; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">📋 Exact Markings Summary</h2>
-        <div style="margin-bottom: 30px;">
-            ${exactMarkingsList}
-        </div>
-        
-        <h2 style="color: #667eea; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">🎯 Visual Grid - Room Details</h2>
-        ${roomDetails}
-    </div>
-</body>
-</html>`;
-            
-            return htmlReport;
-        }
-
-        function downloadReport() {
-            const report = generateHTMLReport();
-            const blob = new Blob([report], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Gharwali_Diwali_Report_${teamName}_${Date.now()}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function sendReportEmail(autoSend = false) {
-            const totalMarked = rooms.reduce((sum, room) => {
-                return sum + Object.keys(markedLocations[room] || {}).length;
-            }, 0);
-            
-            const reportDate = new Date().toLocaleString();
-            const htmlReport = generateHTMLReport();
-            
-            // Build detailed room summary with exact markings for email
-            let roomSummary = '';
-            let exactMarkingsText = '';
-            
-            rooms.forEach(room => {
-                const markers = markedLocations[room] || {};
-                const count = Object.keys(markers).length;
-                const roomName = roomNames[room];
-                
-                roomSummary += `${roomName}: ${count}/9\n`;
-                
-                // Build exact markings list
-                const markedPoints = [];
-                const unmarkedPoints = [];
-                for (let i = 1; i <= 9; i++) {
-                    if (markers[i]) {
-                        markedPoints.push(`${i} (${markers[i].playerName})`);
-                    } else {
-                        unmarkedPoints.push(i);
-                    }
-                }
-                
-                exactMarkingsText += `\n${roomName} (${count}/9):\n`;
-                if (markedPoints.length > 0) {
-                    exactMarkingsText += `  ✓ Marked: ${markedPoints.join(', ')}\n`;
-                } else {
-                    exactMarkingsText += `  ✗ No points marked\n`;
-                }
-                if (unmarkedPoints.length > 0) {
-                    exactMarkingsText += `  ○ Not Marked: ${unmarkedPoints.join(', ')}\n`;
-                }
-            });
-            
-            const emailParams = {
-                to_email: 'sarkaramrit2@gmail.com',
-                team_name: teamName,
-                total_marked: `${totalMarked}/90`,
-                completion_percent: `${Math.round((totalMarked/90)*100)}%`,
-                report_date: reportDate,
-                room_summary: roomSummary,
-                exact_markings: exactMarkingsText,
-                html_report: htmlReport,
-                from_name: `Gharwali Diwali Game - ${teamName}`
-            };
-            
-            // Show sending indicator
-            const indicator = document.getElementById('syncIndicator');
-            indicator.textContent = '📧 Sending email...';
-            indicator.classList.add('show');
-            
-            // Send email using EmailJS
-            emailjs.send('service_8r59eso', 'template_h8l4kvl', emailParams)
-                .then(function(response) {
-                    console.log('✅ Email sent successfully!', response.status, response.text);
-                    indicator.textContent = '✅ Email sent!';
-                    if (!autoSend) {
-                        alert('✅ Email sent successfully to sarkaramrit2@gmail.com!');
-                    }
-                    setTimeout(() => {
-                        indicator.classList.remove('show');
-                    }, 3000);
-                    
-                    // Also download the report
-                    downloadReport();
-                }, function(error) {
-                    console.error('❌ Email send failed:', error);
-                    indicator.textContent = '❌ Email failed';
-                    if (!autoSend) {
-                        alert('❌ Failed to send email. Opening email client as fallback...');
-                        // Fallback to mailto
-                        const subject = `Gharwali Diwali Game Report - ${teamName}`;
-                        const body = `Game Report for Team: ${teamName}\n\n` +
-                                    `Total Locations Marked: ${totalMarked}/90 (${Math.round((totalMarked/90)*100)}%)\n` +
-                                    `Completed At: ${reportDate}\n\n` +
-                                    `Room Summary:\n${roomSummary}\n` +
-                                    `\nEXACT MARKINGS BY ROOM:${exactMarkingsText}\n\n` +
-                                    `Note: The detailed HTML report has been downloaded. Please attach it to this email.`;
-                        window.open(`mailto:sarkaramrit2@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
-                        downloadReport();
-                    }
-                    setTimeout(() => {
-                        indicator.classList.remove('show');
-                    }, 3000);
-                });
         }
 
         function endGame() {
@@ -2841,10 +2746,7 @@
             
             syncToDatabase({ gameActive: false });
             
-            // Automatically send report via email - no popup
-            setTimeout(() => {
-                sendReportEmail(true); // autoSend = true (no alert)
-            }, 1000);
+            console.log('🎉 Game completed! Admin can view results on dashboard.');
         }
 
         function resetGame() {
@@ -2854,7 +2756,7 @@
             
             gameActive = false;
             clearInterval(timerInterval);
-            timeRemaining = 60;
+            timeRemaining = initialTimerValue; // Use admin-set value
             bonusAdded = false;
             // No start button in this version
             document.getElementById('gameOver').style.display = 'none';
@@ -2930,10 +2832,11 @@
         HOW MULTIPLAYER WORKS:
         - All players with same team name share state
         - Marks sync instantly across all devices
-        - Shared timer for the whole team (1 min + 30 sec bonus!)
+        - Shared timer for the whole team (2 min + 30 sec bonus!)
         - See who marked each location
         - Active player count updates live
         - Game auto-starts when you login
+        - Admin can view all team progress on dashboard
         
         TIPS:
         - Open in multiple browser tabs to test
