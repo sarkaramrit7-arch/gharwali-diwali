@@ -95,7 +95,15 @@
                     <p id="displayTeamLabel2" style="font-size: 18px; font-weight: bold; color: #51cf66; padding: 10px; background: #f0f0f0; border-radius: 8px; text-align: center;"></p>
                 </div>
                 <div class="form-group">
-                    <label>👥 Current Team Members</label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        👥 Current Team Members
+                        <span class="info-tooltip">
+                            ℹ️
+                            <span class="info-tooltip-text">
+                                Teams are assigned using a consistent algorithm based on your name. Same name = Same team every time! ✨
+                            </span>
+                        </span>
+                    </label>
                     <div id="teamMembersList" style="padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 50px;">
                         <p style="color: #999; text-align: center; font-size: 14px;">Loading team members...</p>
                     </div>
