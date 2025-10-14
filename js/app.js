@@ -726,7 +726,7 @@
         }
         
         async function loadTeamMembers() {
-            // Load and display all current team members
+            // Load and display all assigned team members (not just active ones)
             const teamMembersList = document.getElementById('teamMembersList');
             
             // Wait for Firebase to be ready
@@ -737,41 +737,101 @@
             }
             
             if (!database || !window.firebaseDB) {
-                teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">You are the first member! 🎉</p>';
+                teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">Loading teammates...</p>';
                 return;
             }
             
             try {
                 const { ref, get } = window.firebaseDB;
-                const activePlayersRef = ref(database, 'activePlayers');
-                const snapshot = await get(activePlayersRef);
-                const members = [];
                 
-                if (snapshot.exists()) {
-                    const activePlayers = snapshot.val();
-                    // Get all players from the same team
-                    for (let pid in activePlayers) {
-                        if (activePlayers[pid].team === teamName && activePlayers[pid].isActive) {
-                            members.push(activePlayers[pid].name);
-                        }
+                // Get all player-team assignments from Firebase
+                const assignmentsRef = ref(database, 'playerTeamAssignments');
+                const assignmentsSnapshot = await get(assignmentsRef);
+                
+                if (!assignmentsSnapshot.exists()) {
+                    teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">No team assignments yet.</p>';
+                    return;
+                }
+                
+                const assignments = assignmentsSnapshot.val();
+                
+                // Get active players to show online status
+                const activePlayersRef = ref(database, 'activePlayers');
+                const activeSnapshot = await get(activePlayersRef);
+                const activePlayers = activeSnapshot.exists() ? activeSnapshot.val() : {};
+                
+                // Find all teammates (players assigned to the same team)
+                const teammates = [];
+                const activePlayerNames = new Set();
+                
+                // Get list of currently active players from this team
+                Object.values(activePlayers).forEach(player => {
+                    if (player.team === teamName && player.isActive) {
+                        activePlayerNames.add(player.name);
+                    }
+                });
+                
+                // Get all assigned teammates
+                for (const [name, assignedTeam] of Object.entries(assignments)) {
+                    if (assignedTeam === teamName) {
+                        teammates.push({
+                            name: name,
+                            isOnline: activePlayerNames.has(name),
+                            isYou: name === playerName
+                        });
                     }
                 }
                 
+                // Sort: You first, then online players, then offline players, all alphabetically within groups
+                teammates.sort((a, b) => {
+                    if (a.isYou) return -1;
+                    if (b.isYou) return 1;
+                    if (a.isOnline && !b.isOnline) return -1;
+                    if (!a.isOnline && b.isOnline) return 1;
+                    return a.name.localeCompare(b.name);
+                });
+                
                 // Display team members
-                if (members.length === 0) {
-                    teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">You are the first member! 🎉</p>';
+                if (teammates.length === 0) {
+                    teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">No teammates assigned yet.</p>';
                 } else {
-                    const membersHTML = members.map(name => 
-                        `<div style="display: inline-block; padding: 8px 15px; margin: 5px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 20px; font-size: 14px; font-weight: 500;">
-                            ${name === playerName ? '👤 ' + name + ' (You)' : '👥 ' + name}
-                        </div>`
-                    ).join('');
-                    teamMembersList.innerHTML = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">${membersHTML}</div>`;
+                    const membersHTML = teammates.map(member => {
+                        let icon, label, bgGradient;
+                        
+                        if (member.isYou) {
+                            icon = '👤';
+                            label = `${member.name} (You)`;
+                            bgGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                        } else if (member.isOnline) {
+                            icon = '🟢';
+                            label = member.name;
+                            bgGradient = 'linear-gradient(135deg, #51cf66 0%, #37b24d 100%)';
+                        } else {
+                            icon = '⚪';
+                            label = member.name;
+                            bgGradient = 'linear-gradient(135deg, #999 0%, #777 100%)';
+                        }
+                        
+                        return `<div style="display: inline-block; padding: 8px 15px; margin: 5px; background: ${bgGradient}; color: white; border-radius: 20px; font-size: 14px; font-weight: 500;">
+                            ${icon} ${label}
+                        </div>`;
+                    }).join('');
+                    
+                    const onlineCount = teammates.filter(m => m.isOnline).length;
+                    const totalCount = teammates.length;
+                    
+                    teamMembersList.innerHTML = `
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <span style="color: #51cf66; font-weight: 600;">🟢 ${onlineCount} online</span>
+                            <span style="color: #999; margin: 0 8px;">•</span>
+                            <span style="color: #666; font-weight: 600;">👥 ${totalCount} total</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">${membersHTML}</div>
+                    `;
                 }
             } catch (error) {
                 console.error('Error loading team members:', error);
-                // Show as first member instead of error
-                teamMembersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 14px;">You are the first member! 🎉</p>';
+                teamMembersList.innerHTML = '<p style="color: #ff6b6b; text-align: center; font-size: 14px;">Error loading teammates</p>';
             }
         }
         
