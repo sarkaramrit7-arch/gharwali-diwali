@@ -109,10 +109,7 @@
                     </div>
                 </div>
                 <button type="button" class="login-btn" onclick="proceedToChallenges()">Continue</button>
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button type="button" class="login-btn" onclick="backToNameFromTeam()" style="background: #999; flex: 1; min-width: 120px;">← Back</button>
-                    <button type="button" class="login-btn" onclick="leaveTeamFromAssignment()" style="background: #ff6b6b; flex: 1; min-width: 120px;">Leave Team</button>
-                </div>
+                <button type="button" class="login-btn" onclick="leaveTeamFromAssignment()" style="background: #ff6b6b; width: 100%; margin-top: 15px;">Leave Team</button>
             </div>
         </div>
 
@@ -130,7 +127,12 @@
             
             <!-- Leaderboard -->
             <div class="leaderboard-container">
-                <h3 style="text-align: center; color: #667eea; margin-bottom: 15px;">🏆 Leaderboard</h3>
+                <div style="display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 15px;">
+                    <h3 style="text-align: center; color: #667eea; margin: 0;">🏆 Leaderboard</h3>
+                    <button onclick="showMVPModal()" class="mvp-icon" title="View Top Players">
+                        ⭐
+                    </button>
+                </div>
                 <div class="leaderboard-scroll">
                     <table class="leaderboard">
                         <thead>
@@ -550,6 +552,19 @@
     <button id="musicToggle" class="music-toggle" onclick="toggleMusic()" title="Toggle Music">
         🔊
     </button>
+    
+    <!-- MVP Modal -->
+    <div id="mvpModal" class="mvp-modal hidden" onclick="closeMVPModal(event)">
+        <div class="mvp-modal-content" onclick="event.stopPropagation()">
+            <button class="mvp-close-btn" onclick="closeMVPModal()">✖</button>
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 28px;">🏆 Top Players 🏆</h2>
+            <div id="mvpContent">
+                <p style="text-align: center; color: #999; font-style: italic; padding: 40px;">
+                    MVP rankings will be revealed at the end of the game! 🎉
+                </p>
+            </div>
+        </div>
+    </div>
 
     <!-- Application Script -->
     <script src="js/app.js"></script>
