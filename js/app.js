@@ -169,11 +169,11 @@
             // Check if we're past the final target
             if (now >= finalTarget) {
                 // Event has started!
-                if (headingElement) headingElement.innerHTML = '🎉 IT\'S PARTY TIME! 🎉';
-                countdownElement.innerHTML = '🎊 LET THE GAMES BEGIN! 🎊';
+                if (headingElement) headingElement.innerHTML = '🚀 SHOWTIME! THE MADNESS HAS BEGUN! 🎯';
+                countdownElement.innerHTML = '🔥 GAME ON! LET\'S GOOO! 🔥';
                 countdownElement.style.fontSize = '24px';
                 countdownElement.style.animation = 'pulse 1s infinite';
-                if (subtextElement) subtextElement.innerHTML = '✨ Let the games begin! ✨';
+                if (subtextElement) subtextElement.innerHTML = '💥 May the odds be ever in your favor! 🎲';
                 return;
             }
             
@@ -188,7 +188,7 @@
                 
                 const formatNum = (num) => String(num).padStart(2, '0');
                 
-                if (headingElement) headingElement.innerHTML = '🤯 PLOT TWIST! The games starts at 6:45PM 🤯';
+                if (headingElement) headingElement.innerHTML = '⏰ PSYCHE! Not Yet... Game Starts @ 6:45PM! 🎭';
                 countdownElement.innerHTML = `
                     ${formatNum(hours)} Hours : 
                     ${formatNum(minutes)} Mins : 
@@ -215,7 +215,7 @@
             const formatNum = (num) => String(num).padStart(2, '0');
             
             // Update display for Stage 1
-            if (headingElement) headingElement.innerHTML = '🎆 Fun Begins In... 🎆';
+            if (headingElement) headingElement.innerHTML = '🎪 Let The Games Begin In... 🎊';
             countdownElement.innerHTML = `
                 ${days} ${days === 1 ? 'Day' : 'Days'} : 
                 ${formatNum(hours)} Hours : 
@@ -2531,7 +2531,7 @@
             
             // Update surprise message with actual bonus time
             const surpriseMsg = document.getElementById('surpriseMessage');
-            surpriseMsg.innerHTML = `🎉 PLOT TWIST! 🎉<br>You get ${bonusTime} MORE SECONDS!<br>It's not over yet! 😄`;
+            surpriseMsg.innerHTML = `🎊 SURPRISE! 🎊<br>BONUS ROUND: ${bonusTime} Extra Seconds!<br>The game's NOT over! 🔥😱`;
             
             document.getElementById('surpriseOverlay').classList.add('show');
             surpriseMsg.classList.add('show');
@@ -2684,9 +2684,19 @@ window.showMVPModal = async function() {
     
     modal.classList.remove('hidden');
     
+    // Check if database is initialized
+    if (!database || !window.firebaseDB) {
+        content.innerHTML = `
+            <p style="text-align: center; color: #999; font-style: italic; padding: 40px;">
+                MVP rankings will be revealed at the end of the game! 🎉
+            </p>
+        `;
+        return;
+    }
+    
     // Load MVP data from Firebase
     try {
-        const mvpRef = window.firebaseDB.ref(window.db, 'mvpPlayers');
+        const mvpRef = window.firebaseDB.ref(database, 'mvpPlayers');
         const snapshot = await window.firebaseDB.get(mvpRef);
         const mvpData = snapshot.val();
         
