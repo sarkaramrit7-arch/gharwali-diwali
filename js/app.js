@@ -682,9 +682,17 @@
                 document.getElementById('confirmTeamName').textContent = savedTeamName;
                 document.getElementById('confirmScreen').classList.remove('hidden');
                 document.getElementById('nameScreen').classList.add('hidden');
+                
+                // Hide music button when showing confirm screen (not first screen)
+                const musicToggle = document.getElementById('musicToggle');
+                if (musicToggle) musicToggle.style.display = 'none';
             } else {
                 // New user - show name screen
                 document.getElementById('nameScreen').classList.remove('hidden');
+                
+                // Show music button on first screen
+                const musicToggle = document.getElementById('musicToggle');
+                if (musicToggle) musicToggle.style.display = 'flex';
             }
             
             // Load leaderboard from Firebase
@@ -714,6 +722,17 @@
             document.getElementById('confirmScreen').classList.add('hidden');
             document.getElementById('challengesScreen').classList.remove('hidden');
             
+            // Hide music button when skipping to challenges
+            const musicToggle = document.getElementById('musicToggle');
+            if (musicToggle) musicToggle.style.display = 'none';
+            
+            // Stop music
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+                backgroundMusic.currentTime = 0;
+            }
+            
             // Load challenge status when entering challenges screen
             loadChallengeStatus();
         }
@@ -723,6 +742,10 @@
             sessionStorage.clear();
             document.getElementById('confirmScreen').classList.add('hidden');
             document.getElementById('nameScreen').classList.remove('hidden');
+            
+            // Show music button when going to name screen
+            const musicToggle = document.getElementById('musicToggle');
+            if (musicToggle) musicToggle.style.display = 'flex';
         }
         
         async function loadTeamMembers() {
@@ -939,6 +962,16 @@
             // Switch screens
             document.getElementById('nameScreen').classList.add('hidden');
             document.getElementById('teamScreen').classList.remove('hidden');
+            
+            // Hide music button and stop music when leaving first screen
+            const musicToggle = document.getElementById('musicToggle');
+            if (musicToggle) musicToggle.style.display = 'none';
+            
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+                backgroundMusic.currentTime = 0;
+            }
         }
         
         function proceedToChallenges() {
