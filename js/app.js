@@ -435,6 +435,10 @@
         const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket', 'Bam'];
         const challenges = ['ch1', 'ch2', 'ch3', 'ch4'];
         
+        // Store team players globally for leaderboard tooltips
+        let teamPlayersData = {};
+        let currentScores = {};
+        
         // Load and update leaderboard from Firebase
         function loadLeaderboard() {
             if (!database || !window.firebaseDB) {
@@ -444,10 +448,41 @@
             
             const { ref, onValue } = window.firebaseDB;
             const scoresRef = ref(database, 'scores');
+            const activePlayersRef = ref(database, 'activePlayers');
             
+            // Listen for score changes
             onValue(scoresRef, (snapshot) => {
-                const scores = snapshot.val() || {};
-                updateLeaderboardDisplay(scores);
+                currentScores = snapshot.val() || {};
+                updateLeaderboardDisplay(currentScores);
+            });
+            
+            // Listen for active players changes
+            onValue(activePlayersRef, (snapshot) => {
+                const activePlayers = snapshot.val() || {};
+                updateTeamPlayersData(activePlayers);
+                // Refresh leaderboard display with updated player tooltips
+                updateLeaderboardDisplay(currentScores);
+            });
+        }
+        
+        // Update team players data for tooltips
+        function updateTeamPlayersData(activePlayers) {
+            // Clear team players data
+            teamPlayersData = {};
+            teamNames.forEach(team => teamPlayersData[team] = []);
+            
+            // Group active players by team
+            Object.values(activePlayers).forEach(player => {
+                if (player.isActive && player.team && player.name) {
+                    if (teamPlayersData[player.team] && !teamPlayersData[player.team].includes(player.name)) {
+                        teamPlayersData[player.team].push(player.name);
+                    }
+                }
+            });
+            
+            // Sort player names alphabetically in each team
+            teamNames.forEach(team => {
+                teamPlayersData[team].sort();
             });
         }
         
@@ -643,18 +678,30 @@
             // Sort by total (descending)
             teamsData.sort((a, b) => b.total - a.total);
             
-            // Update table
-            tbody.innerHTML = teamsData.map((team, index) => `
+            // Update table with player tooltips
+            tbody.innerHTML = teamsData.map((team, index) => {
+                const players = teamPlayersData[team.name] || [];
+                const playersHtml = players.length > 0 
+                    ? players.map(p => `<div class="tooltip-player">👤 ${p}</div>`).join('')
+                    : '<div class="tooltip-empty">No players online</div>';
+                
+                return `
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${team.name}</td>
+                    <td class="team-name-cell">
+                        ${team.name}
+                        <div class="team-players-tooltip">
+                            <div class="tooltip-title">🎯 ${team.name} Players</div>
+                            ${playersHtml}
+                        </div>
+                    </td>
                     <td>${team.ch1 > 0 ? team.ch1 : '-'}</td>
                     <td>${team.ch2 > 0 ? team.ch2 : '-'}</td>
                     <td>${team.ch3 > 0 ? team.ch3 : '-'}</td>
                     <td>${team.ch4 > 0 ? team.ch4 : '-'}</td>
                     <td>${team.total}</td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
         
         // Close tooltips when clicking outside (mobile)

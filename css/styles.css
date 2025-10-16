@@ -48,6 +48,96 @@
         html {
             scroll-behavior: smooth;
         }
+        
+        /* Team Name Hover Tooltip */
+        .team-name-cell {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .team-name-cell:hover {
+            color: #667eea;
+        }
+        
+        .team-players-tooltip {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        
+        .team-name-cell:hover .team-players-tooltip {
+            opacity: 1;
+            visibility: visible;
+            margin-left: 20px;
+        }
+        
+        .team-players-tooltip::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 8px solid transparent;
+            border-right-color: #667eea;
+        }
+        
+        .tooltip-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .tooltip-player {
+            padding: 5px 0;
+            font-size: 13px;
+        }
+        
+        .tooltip-empty {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+        
+        /* Mobile adjustments for tooltip */
+        @media (max-width: 768px) {
+            .team-players-tooltip {
+                left: 50%;
+                top: 100%;
+                transform: translateX(-50%);
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .team-name-cell:hover .team-players-tooltip {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+            
+            .team-players-tooltip::before {
+                right: 50%;
+                top: auto;
+                bottom: 100%;
+                transform: translateX(50%);
+                border-right-color: transparent;
+                border-bottom-color: #667eea;
+            }
+        }
         .container {
             max-width: 1400px;
             margin: 0 auto;
