@@ -35,12 +35,15 @@ const roomNames = {
 const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket', 'Bam'];
 
 const validPlayerNames = [
-    'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Arnab', 'Avirup', 'Biranchi',
+    'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Amrit', 'Anvi', 'Arnab', 'Avirup', 'Biranchi',
     'Deepali', 'Deepika', 'Dipendu', 'Harshal', 'Indira', 'Kevin', 'Maria',
     'Meet', 'Minal', 'Namy', 'Nikunj', 'Prashanth', 'Priyanka', 'Ryan',
     'Sampada', 'Sharan', 'Shaswat', 'Shreeya', 'Sid', 'Sophia', 'Supriya',
     'Swati', 'Tithi', 'Vraja'
 ];
+
+// Admin players who are not assigned to teams
+const adminPlayers = ['Amrit', 'Anvi'];
 
 // Global State Variables
 let database = null;

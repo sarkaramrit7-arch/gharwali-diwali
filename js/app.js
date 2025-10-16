@@ -270,12 +270,15 @@
         // All valid player names for searchable dropdown
         // Valid player names - loaded from Firebase
         let validPlayerNames = [
-            'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Arnab', 'Avirup', 'Biranchi',
+            'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Amrit', 'Anvi', 'Arnab', 'Avirup', 'Biranchi',
             'Deepali', 'Deepika', 'Dipendu', 'Harshal', 'Indira', 'Kevin', 'Maria',
             'Meet', 'Minal', 'Namy', 'Nikunj', 'Prashanth', 'Priyanka', 'Ryan',
             'Sampada', 'Sharan', 'Shaswat', 'Shreeya', 'Sid', 'Sophia', 'Supriya',
             'Swati', 'Tithi', 'Vraja'
         ]; // Default fallback
+        
+        // Admin players who are not assigned to teams
+        const adminPlayers = ['Amrit', 'Anvi'];
         
         // Load valid player names from Firebase
         async function loadValidPlayerNames() {
@@ -940,6 +943,64 @@
             nameError.classList.remove('show');
             playerName = validatedName;
             
+            // Check if player is an admin (Amrit or Anvi)
+            const isAdmin = adminPlayers.includes(playerName);
+            
+            if (isAdmin) {
+                // Admin players skip team assignment
+                teamName = 'Admin';
+                console.log(`🔑 Admin login detected: ${playerName}`);
+                
+                // Generate player ID
+                playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Store in sessionStorage
+                sessionStorage.setItem('playerName', playerName);
+                sessionStorage.setItem('teamName', teamName);
+                sessionStorage.setItem('playerId', playerId);
+                
+                // Register admin as active (no team)
+                setTimeout(() => {
+                    if (database && window.firebaseDB) {
+                        const { ref, set } = window.firebaseDB;
+                        const playerActiveRef = ref(database, `activePlayers/${playerId}`);
+                        set(playerActiveRef, {
+                            name: playerName,
+                            team: null, // No team for admins
+                            isActive: true,
+                            isAdmin: true,
+                            loginTime: Date.now()
+                        }).then(() => {
+                            console.log('✅ Admin registered in Firebase:', playerName);
+                        }).catch(error => {
+                            console.error('❌ Error registering admin:', error);
+                        });
+                    }
+                }, 200);
+                
+                continueBtn.disabled = false;
+                continueBtn.textContent = originalBtnText;
+                
+                // Hide music button and stop music
+                const musicToggle = document.getElementById('musicToggle');
+                if (musicToggle) musicToggle.style.display = 'none';
+                
+                const backgroundMusic = document.getElementById('backgroundMusic');
+                if (backgroundMusic) {
+                    backgroundMusic.pause();
+                    backgroundMusic.currentTime = 0;
+                }
+                
+                // Skip directly to challenges screen for admins
+                document.getElementById('nameScreen').classList.add('hidden');
+                document.getElementById('challengesScreen').classList.remove('hidden');
+                loadLeaderboard();
+                loadChallengeStatus();
+                loadGameSettings();
+                return; // Exit early for admins
+            }
+            
+            // Regular player flow - get team assignment
             try {
                 const { ref, get } = window.firebaseDB;
                 const assignmentRef = ref(database, `playerTeamAssignments/${playerName}`);
