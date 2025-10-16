@@ -517,40 +517,39 @@
                     title: 'Memory Challenge',
                     shortDesc: 'Test your memory skills!',
                     tooltip: `<strong>📋 Point System</strong>
-                        <div class="score-line">🥇 1st Place: 100 points</div>
-                        <div class="score-line">🥈 2nd Place: 80 points</div>
-                        <div class="score-line">🥉 3rd Place: 60 points</div>
-                        <div class="score-line">4th Place: 40 points</div>
-                        <div class="score-line">5th Place: 20 points</div>
-                        <div class="score-line">6th Place: 0 points</div>`
+                        <div class="score-line"><strong>Game 1 (Memory Items):</strong></div>
+                        <div class="score-line">🥇 1st Place: 50 points</div>
+                        <div class="score-line">📉 Last Place: 0 points</div>
+                        <div class="score-line" style="margin-top: 8px;"><strong>Game 2:</strong></div>
+                        <div class="score-line">✅ Each right answer: +5 points</div>
+                        <div class="score-line">❌ No negative marking</div>`
                 },
                 2: {
                     title: "Cliche' Party Games",
                     shortDesc: 'Classic party fun!',
                     tooltip: `<strong>🎲 Point System</strong>
                         <div class="score-line"><strong>Game 1:</strong></div>
-                        <div class="score-line">🏆 Winner: 30 points</div>
-                        <div class="score-line">❌ Loser: 0 points</div>
+                        <div class="score-line">🏆 Winner: 20 points</div>
+                        <div class="score-line">❌ Runners-up: 0 points</div>
                         <div class="score-line" style="margin-top: 8px;"><strong>Game 2:</strong></div>
-                        <div class="score-line">🏆 Winner: 70 points</div>
-                        <div class="score-line">🥈 Runner-up: 35 points</div>
-                        <div class="score-line">❌ Loser: 0 points</div>`
+                        <div class="score-line">✅ Each right answer: +5 points</div>
+                        <div class="score-line">❌ Each wrong answer: -5 points</div>`
                 },
                 3: {
                     title: "It's Trivia Time",
                     shortDesc: 'Test your knowledge!',
-                    tooltip: `<strong>🧠 Point System</strong>
-                        <div class="score-line">🥇 1st Place: 150 points</div>
-                        <div class="score-line">🥈 2nd Place: 125 points</div>
-                        <div class="score-line">🥉 3rd Place: 100 points</div>
-                        <div class="score-line">4th Place: 75 points</div>
-                        <div class="score-line">5th Place: 50 points</div>
-                        <div class="score-line">6th Place: 0 points</div>`
+                    tooltip: `<strong>🧠 Point System (36 Questions Total)</strong>
+                        <div class="score-line">📝 6 sets × 6 questions each</div>
+                        <div class="score-line">👤 One frontline player per team per set</div>
+                        <div class="score-line">⚡ Fastest correct answer: 5 points</div>
+                        <div class="score-line">👥 Team fallback (if no frontline answers): 3 points</div>
+                        <div class="score-line">⚠️ Everyone gets just 1 guess</div>
+                        <div class="score-line" style="margin-top: 6px; color: #51cf66;">🏆 All 6 frontline players compete for each question!</div>`
                 },
                 4: {
-                    title: 'House Marker',
-                    shortDesc: 'Count items in each room!',
-                    tooltip: `<strong>🏠 Point System</strong>
+                    title: 'The Great Item Hunt',
+                    shortDesc: 'Hunt & count items in each room!',
+                    tooltip: `<strong>🔎 Point System</strong>
                         <div class="score-line">🥇 1st Place: 150 points</div>
                         <div class="score-line">🥈 2nd Place: 125 points</div>
                         <div class="score-line">🥉 3rd Place: 100 points</div>
