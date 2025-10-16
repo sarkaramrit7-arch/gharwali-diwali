@@ -517,7 +517,7 @@
                     title: 'Memory Challenge',
                     shortDesc: 'Test your memory skills!',
                     tooltip: `<strong>📋 Point System</strong>
-                        <div class="score-line"><strong>Game 1 (Memory Items):</strong></div>
+                        <div class="score-line"><strong>Game 1:</strong></div>
                         <div class="score-line">🥇 1st Place: 50 points</div>
                         <div class="score-line">📉 Last Place: 0 points</div>
                         <div class="score-line" style="margin-top: 8px;"><strong>Game 2:</strong></div>
