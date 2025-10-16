@@ -448,7 +448,7 @@
             
             const { ref, onValue } = window.firebaseDB;
             const scoresRef = ref(database, 'scores');
-            const activePlayersRef = ref(database, 'activePlayers');
+            const playerAssignmentsRef = ref(database, 'playerTeamAssignments');
             
             // Listen for score changes
             onValue(scoresRef, (snapshot) => {
@@ -456,26 +456,26 @@
                 updateLeaderboardDisplay(currentScores);
             });
             
-            // Listen for active players changes
-            onValue(activePlayersRef, (snapshot) => {
-                const activePlayers = snapshot.val() || {};
-                updateTeamPlayersData(activePlayers);
+            // Listen for player team assignments changes
+            onValue(playerAssignmentsRef, (snapshot) => {
+                const assignments = snapshot.val() || {};
+                updateTeamPlayersData(assignments);
                 // Refresh leaderboard display with updated player tooltips
                 updateLeaderboardDisplay(currentScores);
             });
         }
         
         // Update team players data for tooltips
-        function updateTeamPlayersData(activePlayers) {
+        function updateTeamPlayersData(assignments) {
             // Clear team players data
             teamPlayersData = {};
             teamNames.forEach(team => teamPlayersData[team] = []);
             
-            // Group active players by team
-            Object.values(activePlayers).forEach(player => {
-                if (player.isActive && player.team && player.name) {
-                    if (teamPlayersData[player.team] && !teamPlayersData[player.team].includes(player.name)) {
-                        teamPlayersData[player.team].push(player.name);
+            // Group all assigned players by team
+            Object.entries(assignments).forEach(([playerName, teamName]) => {
+                if (teamName && teamPlayersData[teamName]) {
+                    if (!teamPlayersData[teamName].includes(playerName)) {
+                        teamPlayersData[teamName].push(playerName);
                     }
                 }
             });
@@ -683,7 +683,7 @@
                 const players = teamPlayersData[team.name] || [];
                 const playersHtml = players.length > 0 
                     ? players.map(p => `<div class="tooltip-player">👤 ${p}</div>`).join('')
-                    : '<div class="tooltip-empty">No players online</div>';
+                    : '<div class="tooltip-empty">No players assigned</div>';
                 
                 return `
                 <tr>
