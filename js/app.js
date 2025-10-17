@@ -435,7 +435,7 @@
         }
 
         // Team names pool for auto-assignment (Diwali firecrackers themed)
-        const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket', 'Bam'];
+        const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket'];
         const challenges = ['ch1', 'ch2', 'ch3', 'ch4'];
         
         // Store team players globally for leaderboard tooltips

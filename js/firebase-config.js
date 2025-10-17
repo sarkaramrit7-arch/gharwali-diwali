@@ -32,7 +32,7 @@ const roomNames = {
     'living-room': 'Living Room'
 };
 
-const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket', 'Bam'];
+const teamNames = ['Phuljhari', 'Anaar', 'Charkhi', 'Bullet', 'Rocket'];
 
 const validPlayerNames = [
     'Aayush', 'Aayushi', 'Abhishek', 'Adwait', 'Amrit', 'Anvi', 'Arnab', 'Avirup', 'Biranchi',
