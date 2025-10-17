@@ -917,6 +917,76 @@
             }
         }
         
+        // Check if a player is already logged in on another session
+        async function checkExistingSession(playerName) {
+            if (!database || !window.firebaseDB) {
+                console.warn('⚠️ Firebase not ready, cannot check existing session');
+                return null;
+            }
+            
+            try {
+                const { ref, get } = window.firebaseDB;
+                const activePlayersRef = ref(database, 'activePlayers');
+                const snapshot = await get(activePlayersRef);
+                
+                if (snapshot.exists()) {
+                    const activePlayers = snapshot.val();
+                    // Find any active player with the same name
+                    for (const [playerId, playerData] of Object.entries(activePlayers)) {
+                        if (playerData.name === playerName && playerData.isActive) {
+                            console.log(`🔍 Found existing session for ${playerName}:`, playerData);
+                            return {
+                                playerId: playerId,
+                                loginTime: playerData.loginTime,
+                                team: playerData.team,
+                                isAdmin: playerData.isAdmin || false
+                            };
+                        }
+                    }
+                }
+                
+                return null; // No existing session found
+            } catch (error) {
+                console.error('Error checking existing session:', error);
+                return null;
+            }
+        }
+        
+        // Clear existing session(s) for a player
+        async function clearExistingSession(playerName) {
+            if (!database || !window.firebaseDB) {
+                console.warn('⚠️ Firebase not ready, cannot clear existing session');
+                return;
+            }
+            
+            try {
+                const { ref, get, remove } = window.firebaseDB;
+                const activePlayersRef = ref(database, 'activePlayers');
+                const snapshot = await get(activePlayersRef);
+                
+                if (snapshot.exists()) {
+                    const activePlayers = snapshot.val();
+                    const removalPromises = [];
+                    
+                    // Find and remove all sessions for this player
+                    for (const [playerId, playerData] of Object.entries(activePlayers)) {
+                        if (playerData.name === playerName) {
+                            console.log(`🗑️ Removing session ${playerId} for ${playerName}`);
+                            const playerRef = ref(database, `activePlayers/${playerId}`);
+                            removalPromises.push(remove(playerRef));
+                        }
+                    }
+                    
+                    // Wait for all removals to complete
+                    await Promise.all(removalPromises);
+                    console.log(`✅ Cleared ${removalPromises.length} session(s) for ${playerName}`);
+                }
+            } catch (error) {
+                console.error('Error clearing existing session:', error);
+                throw error;
+            }
+        }
+        
         async function proceedToPassword() {
             const enteredPlayerName = document.getElementById('playerName').value.trim();
             const validatedName = document.getElementById('playerNameValidated').value;
@@ -939,9 +1009,43 @@
             // Show loading state
             const originalBtnText = continueBtn.textContent;
             continueBtn.disabled = true;
-            continueBtn.textContent = 'Checking team assignment...';
+            continueBtn.textContent = 'Checking existing sessions...';
             nameError.classList.remove('show');
             playerName = validatedName;
+            
+            // Check if player is already logged in on another session
+            try {
+                const existingSession = await checkExistingSession(playerName);
+                if (existingSession) {
+                    // Player already logged in, ask for confirmation
+                    const confirmed = confirm(
+                        `⚠️ Already Logged In!\n\n` +
+                        `"${playerName}" is already logged in on another session/device.\n\n` +
+                        `Login time: ${new Date(existingSession.loginTime).toLocaleString()}\n` +
+                        `Team: ${existingSession.team || 'Admin'}\n\n` +
+                        `Do you want to logout from the previous session and continue with this login?\n\n` +
+                        `Click OK to proceed (previous session will be cleared)\n` +
+                        `Click Cancel to stay on this screen`
+                    );
+                    
+                    if (!confirmed) {
+                        // User cancelled, reset button and return
+                        continueBtn.disabled = false;
+                        continueBtn.textContent = originalBtnText;
+                        return;
+                    }
+                    
+                    // User confirmed, clear the existing session(s)
+                    continueBtn.textContent = 'Clearing old session...';
+                    await clearExistingSession(playerName);
+                    console.log(`✅ Cleared previous session for ${playerName}`);
+                }
+            } catch (error) {
+                console.error('Error checking existing session:', error);
+                // Continue with login even if check fails
+            }
+            
+            continueBtn.textContent = 'Checking team assignment...';
             
             // Check if player is an admin (Amrit or Anvi)
             const isAdmin = adminPlayers.includes(playerName);
