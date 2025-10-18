@@ -16,7 +16,7 @@ const CHALLENGE1_PASSWORD = atob('bWVtb3J5'); // "memory"
 
 const rooms = [
     'backroom', 'family-room', 'kitchen', 'laundry', 'bathroom',
-    'office', 'coat-closet', 'stairs', 'dining-room', 'living-room'
+    'office', 'stairs', 'dining-room', 'living-room'
 ];
 
 const roomNames = {
@@ -26,7 +26,6 @@ const roomNames = {
     'laundry': 'Laundry',
     'bathroom': 'Bathroom',
     'office': 'Office',
-    'coat-closet': 'Coat Closet',
     'stairs': 'Stairs',
     'dining-room': 'Dining Room',
     'living-room': 'Living Room'

@@ -202,7 +202,7 @@
         
         const rooms = [
             'backroom', 'family-room', 'kitchen', 'laundry', 'bathroom',
-            'office', 'coat-closet', 'stairs', 'dining-room', 'living-room'
+            'office', 'stairs', 'dining-room', 'living-room'
         ];
         
         const roomNames = {
@@ -212,7 +212,6 @@
             'laundry': 'Laundry',
             'bathroom': 'Bathroom',
             'office': 'Office',
-            'coat-closet': 'Coat Closet',
             'stairs': 'Stairs',
             'dining-room': 'Dining Room',
             'living-room': 'Living Room'
@@ -547,23 +546,23 @@
                     title: "It's Trivia Time",
                     shortDesc: 'Test your knowledge!',
                     tooltip: `<strong>🧠 Point System (36 Questions Total)</strong>
-                        <div class="score-line">📝 6 sets × 6 questions each</div>
-                        <div class="score-line">👤 One frontline player per team per set</div>
-                        <div class="score-line">⚡ Fastest correct answer: 5 points</div>
-                        <div class="score-line">👥 Team fallback (if no frontline answers): 3 points</div>
-                        <div class="score-line">⚠️ Everyone gets just 1 guess</div>
-                        <div class="score-line" style="margin-top: 6px; color: #51cf66;">🏆 All 6 frontline players compete for each question!</div>`
+                        <div class="score-line">📝 3 sets × 12 questions each</div>
+                        <div class="score-line">👥 2 frontline players from each team per set</div>
+                        <div class="score-line">⏱️ 10 second timer for frontline players</div>
+                        <div class="score-line">⚡ Frontline correct answer: 5 points</div>
+                        <div class="score-line">👥 Team answer (after 10s): 3 points</div>
+                        <div class="score-line">🔢 Maximum 2 guesses per question</div>
+                        <div class="score-line">✨ No negative marking</div>
+                        <div class="score-line" style="margin-top: 6px; color: #51cf66;">🏆 Each team has 1 MVP who can play 2 rounds!</div>`
                 },
                 4: {
                     title: 'The Great Item Hunt',
                     shortDesc: 'Hunt & count items in each room!',
                     tooltip: `<strong>🔎 Point System</strong>
-                        <div class="score-line">🥇 1st Place: 150 points</div>
-                        <div class="score-line">🥈 2nd Place: 125 points</div>
-                        <div class="score-line">🥉 3rd Place: 100 points</div>
-                        <div class="score-line">4th Place: 75 points</div>
-                        <div class="score-line">5th Place: 50 points</div>
-                        <div class="score-line">6th Place: 0 points</div>`
+                        <div class="score-line">✅ Correct Find: +5 points</div>
+                        <div class="score-line">❌ False Find: -5 points</div>
+                        <div class="score-line" style="margin-top: 6px; color: #f093fb;">💡 81 total locations (9 rooms × 9 markers)</div>
+                        <div class="score-line" style="color: #999;">Be accurate to maximize your score!</div>`
                 }
             };
             
@@ -701,17 +700,9 @@
                 document.getElementById('confirmTeamName').textContent = savedTeamName;
                 document.getElementById('confirmScreen').classList.remove('hidden');
                 document.getElementById('nameScreen').classList.add('hidden');
-                
-                // Hide music button when showing confirm screen (not first screen)
-                const musicToggle = document.getElementById('musicToggle');
-                if (musicToggle) musicToggle.style.display = 'none';
             } else {
                 // New user - show name screen
                 document.getElementById('nameScreen').classList.remove('hidden');
-                
-                // Show music button on first screen
-                const musicToggle = document.getElementById('musicToggle');
-                if (musicToggle) musicToggle.style.display = 'flex';
             }
             
             // Load leaderboard from Firebase
@@ -741,10 +732,6 @@
             document.getElementById('confirmScreen').classList.add('hidden');
             document.getElementById('challengesScreen').classList.remove('hidden');
             
-            // Hide music button when skipping to challenges
-            const musicToggle = document.getElementById('musicToggle');
-            if (musicToggle) musicToggle.style.display = 'none';
-            
             // Stop music
             const backgroundMusic = document.getElementById('backgroundMusic');
             if (backgroundMusic) {
@@ -761,10 +748,6 @@
             sessionStorage.clear();
             document.getElementById('confirmScreen').classList.add('hidden');
             document.getElementById('nameScreen').classList.remove('hidden');
-            
-            // Show music button when going to name screen
-            const musicToggle = document.getElementById('musicToggle');
-            if (musicToggle) musicToggle.style.display = 'flex';
         }
         
         async function loadTeamMembers() {
@@ -1055,10 +1038,7 @@
                 continueBtn.disabled = false;
                 continueBtn.textContent = originalBtnText;
                 
-                // Hide music button and stop music
-                const musicToggle = document.getElementById('musicToggle');
-                if (musicToggle) musicToggle.style.display = 'none';
-                
+                // Stop music
                 const backgroundMusic = document.getElementById('backgroundMusic');
                 if (backgroundMusic) {
                     backgroundMusic.pause();
@@ -1144,10 +1124,7 @@
             document.getElementById('nameScreen').classList.add('hidden');
             document.getElementById('teamScreen').classList.remove('hidden');
             
-            // Hide music button and stop music when leaving first screen
-            const musicToggle = document.getElementById('musicToggle');
-            if (musicToggle) musicToggle.style.display = 'none';
-            
+            // Stop music when leaving first screen
             const backgroundMusic = document.getElementById('backgroundMusic');
             if (backgroundMusic) {
                 backgroundMusic.pause();
@@ -2223,7 +2200,6 @@
                             'laundry': 'Laundry',
                             'bathroom': 'Bathroom',
                             'office': 'Office',
-                            'coat-closet': 'Coat Closet',
                             'stairs': 'Stairs',
                             'dining-room': 'Dining Room',
                             'living-room': 'Living Room'
