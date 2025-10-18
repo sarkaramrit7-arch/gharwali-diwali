@@ -265,7 +265,7 @@
                 <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 20px;">
                     Click a circle to start counting, then use +/− buttons to adjust
                 </p>
-                <div class="markers-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 350px; margin: 0 auto;">
+                <div class="markers-grid" style="grid-template-columns: repeat(3, 1fr); max-width: 350px; margin: 0 auto; gap: 15px;">
                     <div class="marker-point" id="practice1" onclick="adjustPracticeCount(1, 1)">
                         <div class="marker-main-number">•</div>
                     </div>
@@ -284,9 +284,18 @@
                     <div class="marker-point" id="practice6" onclick="adjustPracticeCount(6, 1)">
                         <div class="marker-main-number">•</div>
                     </div>
+                    <div class="marker-point" id="practice7" onclick="adjustPracticeCount(7, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice8" onclick="adjustPracticeCount(8, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
+                    <div class="marker-point" id="practice9" onclick="adjustPracticeCount(9, 1)">
+                        <div class="marker-main-number">•</div>
+                    </div>
                 </div>
                 <div style="text-align: center; margin-top: 15px;">
-                    <button type="button" onclick="resetPracticeRoom()" onmouseover="this.style.background='#777'" onmouseout="this.style.background='#999'" style="padding: 8px 20px; background: #999; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">
+                    <button type="button" onclick="resetPracticeRoom()" onmouseover="this.style.background='#777'" onmouseout="this.style.background='#999'" style="padding: 8px 20px; background: #999; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent;">
                         🔄 Reset Practice
                     </button>
                 </div>

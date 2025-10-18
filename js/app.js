@@ -2647,8 +2647,8 @@
                 delete practiceState[key];
             }
             
-            // Reset all practice markers
-            for (let i = 1; i <= 6; i++) {
+            // Reset all practice markers (now 9 markers)
+            for (let i = 1; i <= 9; i++) {
                 const marker = document.getElementById(`practice${i}`);
                 if (marker) {
                     marker.classList.remove('marked');
