@@ -536,11 +536,12 @@
                     shortDesc: 'Classic party fun!',
                     tooltip: `<strong>🎲 Point System</strong>
                         <div class="score-line"><strong>Game 1:</strong></div>
-                        <div class="score-line">🏆 Winner: 20 points</div>
-                        <div class="score-line">❌ Runners-up: 0 points</div>
+                        <div class="score-line">🎮 Each team plays 2 rounds</div>
+                        <div class="score-line">🏆 Win a round: 20 points</div>
+                        <div class="score-line">❌ Lose a round: 0 points</div>
                         <div class="score-line" style="margin-top: 8px;"><strong>Game 2:</strong></div>
-                        <div class="score-line">✅ Each right answer: +5 points</div>
-                        <div class="score-line">❌ Each wrong answer: -5 points</div>`
+                        <div class="score-line">✅ Right guess: +5 points</div>
+                        <div class="score-line">❌ Wrong guess: -5 points</div>`
                 },
                 3: {
                     title: "It's Trivia Time",
@@ -556,7 +557,7 @@
                         <div class="score-line" style="margin-top: 6px; color: #51cf66;">🏆 Each team has 1 MVP who can play 2 rounds!</div>`
                 },
                 4: {
-                    title: 'The Great Item Hunt',
+                    title: 'The Ultimate Spot Finder',
                     shortDesc: 'Hunt & count items in each room!',
                     tooltip: `<strong>🔎 Point System</strong>
                         <div class="score-line">✅ Correct Find: +5 points</div>
