@@ -149,7 +149,7 @@
         document.addEventListener('DOMContentLoaded', initMusic);
 
         // ==========================================
-        // COUNTDOWN TIMER (Two-Stage Surprise!)
+        // COUNTDOWN TIMER
         // ==========================================
         function updateCountdown() {
             const countdownElement = document.getElementById('countdownTimer');
@@ -160,52 +160,22 @@
             
             const now = new Date();
             
-            // Stage 1: Count down to 4:00 PM PST on October 18, 2025
-            const stage1Target = new Date('2025-10-18T16:00:00-07:00');
+            // Target time: 5:30 PM PST on October 18, 2025
+            const targetTime = new Date('2025-10-18T17:30:00-07:00');
             
-            // Stage 2: Final target at 6:45 PM PST
-            const finalTarget = new Date('2025-10-18T18:45:00-07:00');
-            
-            // Check if we're past the final target
-            if (now >= finalTarget) {
-                // Event has started!
-                if (headingElement) headingElement.innerHTML = '🚀 SHOWTIME! THE MADNESS HAS BEGUN! 🎯';
-                countdownElement.innerHTML = '🔥 GAME ON! LET\'S GOOO! 🔥';
-                countdownElement.style.fontSize = '24px';
+            // Check if countdown is over
+            if (now >= targetTime) {
+                // Countdown finished!
+                if (headingElement) headingElement.innerHTML = '🎬 7:30PM PST: On Your Left... The Games Are Coming! ⚡';
+                countdownElement.innerHTML = 'Get Ready!';
+                countdownElement.style.fontSize = '32px';
                 countdownElement.style.animation = 'pulse 1s infinite';
                 if (subtextElement) subtextElement.innerHTML = '💥 May the odds be ever in your favor! 🎲';
                 return;
             }
             
-            // Check if we're in Stage 2 (between 4 PM and 6:45 PM)
-            if (now >= stage1Target && now < finalTarget) {
-                // Stage 2: Show countdown for remaining time
-                const timeDiff = finalTarget - now;
-                
-                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-                
-                const formatNum = (num) => String(num).padStart(2, '0');
-                
-                if (headingElement) headingElement.innerHTML = '⏰ PSYCHE! Not Yet... Game Starts @ 6:45PM! 🎭';
-                countdownElement.innerHTML = `
-                    ${formatNum(hours)} Hours : 
-                    ${formatNum(minutes)} Mins : 
-                    ${formatNum(seconds)} Secs
-                `;
-                if (subtextElement) subtextElement.innerHTML = '😏 Patience, young grasshopper... ✨';
-                return;
-            }
-            
-            // Stage 1: Count down to 4:00 PM
-            const timeDiff = stage1Target - now;
-            
-            if (timeDiff <= 0) {
-                // Transition moment - shouldn't stay here long
-                countdownElement.innerHTML = '⏰ Calculating... ⏰';
-                return;
-            }
+            // Calculate time remaining
+            const timeDiff = targetTime - now;
             
             const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -214,7 +184,7 @@
             
             const formatNum = (num) => String(num).padStart(2, '0');
             
-            // Update display for Stage 1
+            // Update display
             if (headingElement) headingElement.innerHTML = '🎪 Let The Games Begin In... 🎊';
             countdownElement.innerHTML = `
                 ${days} ${days === 1 ? 'Day' : 'Days'} : 
@@ -222,7 +192,7 @@
                 ${formatNum(minutes)} Mins : 
                 ${formatNum(seconds)} Secs
             `;
-            if (subtextElement) subtextElement.innerHTML = '📅 October 18, 2025 ✨';
+            if (subtextElement) subtextElement.innerHTML = '📅 October 18, 2025 @ 5:30 PM PST ✨';
         }
         
         // Update countdown every second
