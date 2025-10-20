@@ -148,58 +148,6 @@
         // Initialize music when page loads
         document.addEventListener('DOMContentLoaded', initMusic);
 
-        // ==========================================
-        // COUNTDOWN TIMER
-        // ==========================================
-        function updateCountdown() {
-            const countdownElement = document.getElementById('countdownTimer');
-            const headingElement = document.getElementById('countdownHeading');
-            const subtextElement = document.getElementById('countdownSubtext');
-            
-            if (!countdownElement) return;
-            
-            const now = new Date();
-            
-            // Target time: 5:30 PM PST on October 18, 2025
-            const targetTime = new Date('2025-10-18T17:30:00-07:00');
-            
-            // Check if countdown is over
-            if (now >= targetTime) {
-                // Countdown finished!
-                if (headingElement) headingElement.innerHTML = '🎬 7:30PM PST: On Your Left... The Games Are Coming! ⚡';
-                countdownElement.innerHTML = 'Get Ready!';
-                countdownElement.style.fontSize = '32px';
-                countdownElement.style.animation = 'pulse 1s infinite';
-                if (subtextElement) subtextElement.innerHTML = '💥 May the odds be ever in your favor! 🎲';
-                return;
-            }
-            
-            // Calculate time remaining
-            const timeDiff = targetTime - now;
-            
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-            
-            const formatNum = (num) => String(num).padStart(2, '0');
-            
-            // Update display
-            if (headingElement) headingElement.innerHTML = '🎪 Let The Games Begin In... 🎊';
-            countdownElement.innerHTML = `
-                ${days} ${days === 1 ? 'Day' : 'Days'} : 
-                ${formatNum(hours)} Hours : 
-                ${formatNum(minutes)} Mins : 
-                ${formatNum(seconds)} Secs
-            `;
-            if (subtextElement) subtextElement.innerHTML = '📅 October 18, 2025 @ 5:30 PM PST ✨';
-        }
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        // Initialize immediately
-        updateCountdown();
-        
         const rooms = [
             'backroom', 'family-room', 'kitchen', 'laundry', 'bathroom',
             'office', 'stairs', 'dining-room', 'living-room'
@@ -456,6 +404,37 @@
             teamNames.forEach(team => {
                 teamPlayersData[team].sort();
             });
+            
+            // Update the results display with team members
+            updateResultsTeamMembers();
+        }
+        
+        // Update results section with team members for Rocket and Anaar
+        function updateResultsTeamMembers() {
+            const rocketPlayersDiv = document.getElementById('rocketPlayersDisplay');
+            const anaarPlayersDiv = document.getElementById('anaarPlayersDisplay');
+            
+            if (rocketPlayersDiv && teamPlayersData['Rocket']) {
+                const rocketPlayers = teamPlayersData['Rocket'];
+                if (rocketPlayers.length > 0) {
+                    rocketPlayersDiv.innerHTML = rocketPlayers.map(player => 
+                        `<span style="background: #fff9e6; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #FFD700;">${player}</span>`
+                    ).join('');
+                } else {
+                    rocketPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
+                }
+            }
+            
+            if (anaarPlayersDiv && teamPlayersData['Anaar']) {
+                const anaarPlayers = teamPlayersData['Anaar'];
+                if (anaarPlayers.length > 0) {
+                    anaarPlayersDiv.innerHTML = anaarPlayers.map(player => 
+                        `<span style="background: #f5f5f5; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #C0C0C0;">${player}</span>`
+                    ).join('');
+                } else {
+                    anaarPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
+                }
+            }
         }
         
         // Load game settings (timer, bonus time) from Firebase
@@ -627,31 +606,8 @@
         }
         
         function updateLeaderboardDisplay(scores) {
-            // Update results display with team members for Rocket and Anaar
-            const rocketPlayersDiv = document.getElementById('rocketPlayersDisplay');
-            const anaarPlayersDiv = document.getElementById('anaarPlayersDisplay');
-            
-            if (rocketPlayersDiv && teamPlayersData['Rocket']) {
-                const rocketPlayers = teamPlayersData['Rocket'];
-                if (rocketPlayers.length > 0) {
-                    rocketPlayersDiv.innerHTML = rocketPlayers.map(player => 
-                        `<span style="background: #fff9e6; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #FFD700;">${player}</span>`
-                    ).join('');
-                } else {
-                    rocketPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
-                }
-            }
-            
-            if (anaarPlayersDiv && teamPlayersData['Anaar']) {
-                const anaarPlayers = teamPlayersData['Anaar'];
-                if (anaarPlayers.length > 0) {
-                    anaarPlayersDiv.innerHTML = anaarPlayers.map(player => 
-                        `<span style="background: #f5f5f5; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #C0C0C0;">${player}</span>`
-                    ).join('');
-                } else {
-                    anaarPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
-                }
-            }
+            // Update results display with team members
+            updateResultsTeamMembers();
         }
         
         // Close tooltips when clicking outside (mobile)
