@@ -83,31 +83,19 @@
         // BACKGROUND MUSIC CONTROL
         // ==========================================
         let backgroundMusic = null;
-        let isMusicMuted = false;
+        let isMusicMuted = true; // Muted by default
 
         // Initialize music when DOM is loaded
         function initMusic() {
             backgroundMusic = document.getElementById('backgroundMusic');
             const musicToggleBtn = document.getElementById('musicToggle');
             
-            // Check if user had previously muted music
-            const savedMuteState = localStorage.getItem('musicMuted');
-            if (savedMuteState === 'true') {
-                isMusicMuted = true;
-                backgroundMusic.muted = true;
-                musicToggleBtn.textContent = '🔇';
-                musicToggleBtn.classList.add('muted');
-            }
-            
-            // Try to autoplay music (browsers may block this)
-            tryPlayMusic();
-            
-            // Add click listener to play music on first user interaction
-            document.addEventListener('click', function playOnInteraction() {
-                if (!backgroundMusic.playing) {
-                    tryPlayMusic();
-                }
-            }, { once: true });
+            // Music is muted by default for all players
+            isMusicMuted = true;
+            backgroundMusic.muted = true;
+            musicToggleBtn.textContent = '🔇';
+            musicToggleBtn.classList.add('muted');
+            localStorage.setItem('musicMuted', 'true');
         }
 
         // Function to toggle music on/off
