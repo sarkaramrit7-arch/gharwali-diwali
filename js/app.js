@@ -627,54 +627,31 @@
         }
         
         function updateLeaderboardDisplay(scores) {
-            const tbody = document.getElementById('leaderboardBody');
+            // Update results display with team members for Rocket and Anaar
+            const rocketPlayersDiv = document.getElementById('rocketPlayersDisplay');
+            const anaarPlayersDiv = document.getElementById('anaarPlayersDisplay');
             
-            // Calculate totals and sort
-            const teamsData = teamNames.map(team => {
-                const teamScores = scores[team] || {};
-                const ch1 = parseInt(teamScores.ch1) || 0;
-                const ch2 = parseInt(teamScores.ch2) || 0;
-                const ch3 = parseInt(teamScores.ch3) || 0;
-                const ch4 = parseInt(teamScores.ch4) || 0;
-                const total = ch1 + ch2 + ch3 + ch4;
-                
-                return {
-                    name: team,
-                    ch1: ch1,
-                    ch2: ch2,
-                    ch3: ch3,
-                    ch4: ch4,
-                    total: total
-                };
-            });
+            if (rocketPlayersDiv && teamPlayersData['Rocket']) {
+                const rocketPlayers = teamPlayersData['Rocket'];
+                if (rocketPlayers.length > 0) {
+                    rocketPlayersDiv.innerHTML = rocketPlayers.map(player => 
+                        `<span style="background: #fff9e6; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #FFD700;">${player}</span>`
+                    ).join('');
+                } else {
+                    rocketPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
+                }
+            }
             
-            // Sort by total (descending)
-            teamsData.sort((a, b) => b.total - a.total);
-            
-            // Update table with player tooltips
-            tbody.innerHTML = teamsData.map((team, index) => {
-                const players = teamPlayersData[team.name] || [];
-                const playersHtml = players.length > 0 
-                    ? players.map(p => `<div class="tooltip-player">👤 ${p}</div>`).join('')
-                    : '<div class="tooltip-empty">No players assigned</div>';
-                
-                return `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="team-name-cell">
-                        ${team.name}
-                        <div class="team-players-tooltip">
-                            <div class="tooltip-title">🎯 ${team.name} Players</div>
-                            ${playersHtml}
-                        </div>
-                    </td>
-                    <td>${team.ch1 > 0 ? team.ch1 : '-'}</td>
-                    <td>${team.ch2 > 0 ? team.ch2 : '-'}</td>
-                    <td>${team.ch3 > 0 ? team.ch3 : '-'}</td>
-                    <td>${team.ch4 > 0 ? team.ch4 : '-'}</td>
-                    <td>${team.total}</td>
-                </tr>
-            `}).join('');
+            if (anaarPlayersDiv && teamPlayersData['Anaar']) {
+                const anaarPlayers = teamPlayersData['Anaar'];
+                if (anaarPlayers.length > 0) {
+                    anaarPlayersDiv.innerHTML = anaarPlayers.map(player => 
+                        `<span style="background: #f5f5f5; padding: 5px 12px; border-radius: 6px; color: #333; font-size: 12px; border: 1px solid #C0C0C0;">${player}</span>`
+                    ).join('');
+                } else {
+                    anaarPlayersDiv.innerHTML = '<span style="color: #666; font-size: 12px;">No players assigned</span>';
+                }
+            }
         }
         
         // Close tooltips when clicking outside (mobile)
